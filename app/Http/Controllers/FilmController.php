@@ -7,40 +7,41 @@ use App\Models\Genre;
 use App\Services\Films\FilmService;
 use App\Http\Requests\StoreFilmRequest;
 use App\Http\Requests\UpdateFilmRequest;
+use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
 
 class FilmController extends Controller
 {
-    private FilmService $filmService;
-
-    public function __construct(FilmService $filmService)
+    public function __construct(private FilmService $filmService)
     {
-        $this->filmService = $filmService;
     }
 
     /**
-     * Display a listing of the resource.
+     * @return View
      */
-    public function index()
+    public function index(): View
     {
-        $films = Film::with('genres')
-            ->where('status', '=' ,1)
-            ->paginate(15);
-
-        return view('front.film.index')->with(['films' => $films]);
+        return view('front.film.index')->with([
+            'films' => Film::with('genres')
+                ->where('status', '=' ,1)
+                ->paginate(15),
+        ]);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * @return View
      */
-    public function create()
+    public function create(): View
     {
         return view('front.film.create')->with(['genres' => Genre::all()]);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @param StoreFilmRequest $request
+     *
+     * @return JsonResponse
      */
-    public function store(StoreFilmRequest $request)
+    public function store(StoreFilmRequest $request): JsonResponse
     {
         $result = $this->filmService->createFilm($request);
 
@@ -56,9 +57,11 @@ class FilmController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * @param Film $film
+     *
+     * @return View
      */
-    public function edit(Film $film)
+    public function edit(Film $film): View
     {
         return view('front.film.update')->with([
             'film'   => $film,
@@ -67,9 +70,12 @@ class FilmController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * @param UpdateFilmRequest $request
+     * @param Film $film
+     *
+     * @return JsonResponse
      */
-    public function update(UpdateFilmRequest $request, Film $film)
+    public function update(UpdateFilmRequest $request, Film $film): JsonResponse
     {
         $result = $this->filmService->updateFilm($request, $film);
 
@@ -77,23 +83,25 @@ class FilmController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @param Film $film
+     *
+     * @return JsonResponse
      */
-    public function destroy(Film $film)
+    public function destroy(Film $film): JsonResponse
     {
         $result = $this->filmService->deleteFilm($film);
 
         return response()->json($result);
     }
 
-    public function publish(Film $film)
+    public function publish(Film $film): JsonResponse
     {
         $this->filmService->publish($film);
 
         return response()->json(['message' => 'Film published']);
     }
 
-    public function unPublish(Film $film)
+    public function unPublish(Film $film): JsonResponse
     {
         $this->filmService->unPublish($film);
 

@@ -4,21 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Models\Genre;
 use App\Http\Requests\StoreGenreRequest;
+use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
 
 class GenreController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * @return View
      */
-    public function index()
+    public function index(): View
     {
         return view('front.genre.index')->with(['genres' => Genre::all()]);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * @return View
      */
-    public function create()
+    public function create(): View
     {
         return view('front.genre.create');
     }
@@ -26,7 +28,7 @@ class GenreController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreGenreRequest $request)
+    public function store(StoreGenreRequest $request): JsonResponse
     {
         Genre::create($request->validated());
 
@@ -42,17 +44,22 @@ class GenreController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * @param Genre $genre
+     *
+     * @return View
      */
-    public function edit(Genre $genre)
+    public function edit(Genre $genre): View
     {
         return view('front.genre.update')->with(['genre' => $genre]);
     }
 
     /**
-     * Update the specified resource in storage.
+     * @param StoreGenreRequest $request
+     * @param Genre $genre
+     *
+     * @return JsonResponse
      */
-    public function update(StoreGenreRequest $request, Genre $genre)
+    public function update(StoreGenreRequest $request, Genre $genre): JsonResponse
     {
         $genre->update($request->validated());
 
@@ -60,9 +67,11 @@ class GenreController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @param Genre $genre
+     *
+     * @return JsonResponse
      */
-    public function destroy(Genre $genre)
+    public function destroy(Genre $genre): JsonResponse
     {
         $genre->delete();
 
