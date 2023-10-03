@@ -5,19 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\Film;
 use App\Models\Genre;
 use App\Services\Films\FilmService;
-use App\Services\Image\Img;
 use App\Http\Requests\StoreFilmRequest;
 use App\Http\Requests\UpdateFilmRequest;
 
 class FilmController extends Controller
 {
     private FilmService $filmService;
-    private Img $img;
 
-    public function __construct(FilmService $filmService, Img $img)
+    public function __construct(FilmService $filmService)
     {
         $this->filmService = $filmService;
-        $this->img = $img;
     }
 
     /**
