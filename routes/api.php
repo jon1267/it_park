@@ -2,18 +2,15 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
+use App\Http\Controllers\Api\ApiGenreController;
+use App\Http\Controllers\Api\ApiFilmController;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('/genres', [ApiGenreController::class, 'genres']);
+Route::get('/genre/{id}/films', [ApiGenreController::class, 'genreFilms']);
+
+Route::get('/films', [ApiFilmController::class, 'allFilms']);
+Route::get('/film/{id}', [ApiFilmController::class, 'oneFilm']);
