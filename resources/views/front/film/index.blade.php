@@ -7,14 +7,20 @@
             {{--<th>Статус</th>--}}
             <th>Постер</th>
         </tr>
-        @foreach($films as $film)
+        @forelse($films as $film)
+                <tr>
+                    <td>{{ $film->id }}</td>
+                    <td>{{ $film->name }}</td>
+                    {{--<td>{{ $film->status }}</td>--}}
+                    <td> <img src="{{ asset($film->poster) }}" alt="film-poster" height="50px" /> </td>
+                </tr>
+        @empty
             <tr>
-                <td>{{ $film->id }}</td>
-                <td>{{ $film->name }}</td>
-                {{--<td>{{ $film->status }}</td>--}}
-                <td> <img src="{{ asset($film->poster) }}" alt="film-poster" height="50px" /> </td>
+                <td colspan="3">фильмы не найдены</td>
             </tr>
-        @endforeach
+        @endforelse
+
+
     </table>
 </div>
 

@@ -24,7 +24,7 @@ class FilmController extends Controller
         return view('front.film.index')->with([
             'films' => Film::with('genres')
                 ->where('status', '=' ,1)
-                ->paginate(15),
+                ->paginate(10),
         ]);
     }
 

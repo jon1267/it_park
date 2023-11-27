@@ -40,7 +40,7 @@ class GenreController extends Controller
      */
     public function show(Genre $genre)
     {
-        //
+        return response()->json($genre);
     }
 
     /**
@@ -75,6 +75,6 @@ class GenreController extends Controller
     {
         $genre->delete();
 
-        return response()->noContent();
+        return response()->json(['message' => 'Жанр удален']); //response()->noContent();
     }
 }

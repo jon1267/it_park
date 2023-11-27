@@ -9,7 +9,7 @@ Route::get('/', function () {
 });
 
 Route::resource('films',FilmController::class )->except('show');
-Route::resource('genres', GenreController::class )->except('show');
+Route::resource('genres', GenreController::class );//->except('show');
 
 Route::get('films/{film}/publish', [FilmController::class, 'publish']);
 Route::get('films/{film}/unpublish', [FilmController::class, 'unPublish']);
