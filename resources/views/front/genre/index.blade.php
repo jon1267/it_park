@@ -1,6 +1,8 @@
 <h3>Жанры фильмов</h3>
 <div>
-    @foreach($genres as $genre)
+    @forelse($genres as $genre)
         <p>{{ $genre->id }} | {{ $genre->name }}</p>
-    @endforeach
+    @empty
+        <p>жанры не найдены</p>
+    @endforelse
 </div>
