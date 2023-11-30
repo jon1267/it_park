@@ -87,4 +87,65 @@ class JanrsTest extends TestCase
         $response->assertStatus(302);
         $response->assertRedirect('dashboard');
     }
+
+    public function test_create_janr_successful(): void
+    {
+        $janr = ['name' => 'медодрама-сериал'];
+        $response = $this->actingAs($this->user)->post('/janrs', $janr);
+
+        $response->assertStatus(200);
+        $this->assertEquals('Новый жанр создан', $response['message']);
+        $this->assertDatabaseHas('genres', $janr);
+
+        $lastRecord = Genre::latest()->first();
+        $this->assertEquals($janr['name'], $lastRecord->name);
+    }
+
+    public function test_janr_edit_form_contains_correct_values(): void
+    {
+        $janr = Genre::factory()->create();
+        //$lastRecord = Genre::latest()->first(); //this not need here
+
+        $response = $this->actingAs($this->user)->get('janrs/'. $janr->id .'/edit');
+
+        $response->assertStatus(200);
+        $response->assertSee('value="'.$janr->name.'"', false);
+        $response->assertViewHas('genre', $janr);
+        //$this->assertEquals($janr->name, $lastRecord->name); //not need here
+    }
+
+    public function test_janr_update_validation_error_redirect_back_to_form(): void
+    {
+        $janr = Genre::factory()->create();
+
+        $response = $this->actingAs($this->user)->put('janrs/'. $janr->id, ['name' => '']);
+
+        $response->assertStatus(302);
+        $response->assertSessionHasErrors(['name']);
+        $response->assertInvalid(['name']); //same as line above
+    }
+
+    public function test_janr_delete_successful()
+    {
+        $janr = Genre::factory()->create();
+
+        $response = $this->actingAs($this->user)->delete('janrs/' . $janr->id);
+
+        $response->assertStatus(200);
+        $this->assertEquals('Жанр удален', $response['message']);
+        $this->assertDatabaseMissing('genres', $janr->toArray());
+        $this->assertDatabaseCount('genres', 0);
+    }
+
+    public function test_api_returns_janrs_list()
+    {
+        $janr = Genre::factory()->create();
+
+        $response = $this->getJson('/api/genres'); //our api has not route '/api/janrs' but /genres present
+        $responseJanr = $response['data'][0]; //response()->json($result) return [data {...}]
+        $createdJanr = $janr->toArray();
+
+        $this->assertEquals($responseJanr['id'], $createdJanr['id']);
+        $this->assertEquals($responseJanr['name'], $createdJanr['name']);
+    }
 }

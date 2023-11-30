@@ -9,25 +9,16 @@ use Illuminate\View\View;
 
 class JanrController extends Controller
 {
-    /**
-     * @return View
-     */
     public function index(): View
     {
         return view('front.genre.index')->with(['genres' => Genre::paginate(10)]);
     }
 
-    /**
-     * @return View
-     */
     public function create(): View
     {
         return view('front.genre.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreGenreRequest $request): JsonResponse
     {
         Genre::create($request->validated());
@@ -35,45 +26,26 @@ class JanrController extends Controller
         return response()->json(['message' => 'Новый жанр создан']);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Genre $genre)
+    public function show(Genre $janr): JsonResponse
     {
-        return response()->json($genre);
+        return response()->json($janr);
     }
 
-    /**
-     * @param Genre $genre
-     *
-     * @return View
-     */
-    public function edit(Genre $genre): View
+    public function edit(Genre $janr): View
     {
-        return view('front.genre.update')->with(['genre' => $genre]);
+        return view('front.genre.update')->with(['genre' => $janr]);
     }
 
-    /**
-     * @param StoreGenreRequest $request
-     * @param Genre $genre
-     *
-     * @return JsonResponse
-     */
-    public function update(StoreGenreRequest $request, Genre $genre): JsonResponse
+    public function update(StoreGenreRequest $request, Genre $janr): JsonResponse
     {
-        $genre->update($request->validated());
+        $janr->update($request->validated());
 
         return response()->json(['message' => 'Жанр обновлен']);
     }
 
-    /**
-     * @param Genre $genre
-     *
-     * @return JsonResponse
-     */
-    public function destroy(Genre $genre): JsonResponse
+    public function destroy(Genre $janr): JsonResponse
     {
-        $genre->delete();
+        $janr->delete();
 
         return response()->json(['message' => 'Жанр удален']); //response()->noContent();
     }
