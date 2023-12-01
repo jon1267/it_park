@@ -8,6 +8,7 @@ use Tests\TestCase;
 use App\Models\Genre;
 use App\Models\User;
 // php artisan test --filter=JanrsTest
+// php artisan test --filter=PestTest
 
 class JanrsTest extends TestCase
 {
